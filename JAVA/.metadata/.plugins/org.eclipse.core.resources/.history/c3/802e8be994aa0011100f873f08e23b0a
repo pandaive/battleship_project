@@ -1,0 +1,16 @@
+
+public class Medium extends Komputer {
+
+	@Override
+	void strzelanie(boolean cokolwiek) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	boolean Koniec() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

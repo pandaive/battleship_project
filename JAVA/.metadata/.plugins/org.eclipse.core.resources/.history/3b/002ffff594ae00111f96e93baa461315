@@ -1,0 +1,9 @@
+
+
+
+public interface wypisywanie {
+
+	void odczyt(String sciezka);
+	void wpisRanking(String nick, int wynik, String sciezka) throws RankingFull;
+	
+}

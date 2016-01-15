@@ -1,0 +1,30 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+
+public class pliki implements wypisywanie {
+	public static void odczyt(String sciezka){
+    	try {
+			
+    		FileReader odczyt = new FileReader(sciezka);
+    		BufferedReader odczytany = new BufferedReader(odczyt);
+    		String linia;
+    		
+				while((linia = odczytany.readLine()) != null)
+				{
+				System.out.println(linia);
+				
+				}
+		
+			odczyt.close();
+		 
+    	}
+		catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+    	
+    };
+}

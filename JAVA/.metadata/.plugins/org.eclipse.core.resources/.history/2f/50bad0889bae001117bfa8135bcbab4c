@@ -1,0 +1,28 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+
+public class odczytywanie implements wypisywanie {
+	public void odczyt (String sciezka){
+    	try {
+    	FileReader odczyt;
+		odczyt = new FileReader(sciezka);
+		BufferedReader odcz = new BufferedReader(odczyt);
+		String linia;
+		
+		while((linia = odcz.readLine()) != null)
+			{
+			System.out.println(linia);
+			}
+		odczyt.close();
+    } catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+    } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    }; 
+}

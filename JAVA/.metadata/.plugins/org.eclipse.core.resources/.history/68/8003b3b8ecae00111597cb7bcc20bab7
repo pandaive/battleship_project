@@ -1,0 +1,4 @@
+
+public interface strzal {
+void strzelanie(boolean cokolwiek);
+}

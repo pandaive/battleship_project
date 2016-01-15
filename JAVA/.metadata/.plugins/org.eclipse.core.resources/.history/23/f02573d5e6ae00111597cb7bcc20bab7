@@ -1,0 +1,5 @@
+
+public interface wypisywanie {
+	void odczyt(String sciezka);
+	void wpisywanie(String nick, int wynik, String sciezka) throws Wyjatek;
+}

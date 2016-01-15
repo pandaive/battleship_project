@@ -1,0 +1,117 @@
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.StringTokenizer;
+
+
+
+public class obsluga implements wypisywanie{
+
+	public void odczyt(String sciezka){     // funkcja wypisujaca zawartosc pliku(w zaleznosci od parametru pomocy lub rankingu) liniami
+			
+		try {
+			RandomAccessFile plik = new RandomAccessFile(sciezka, "r");
+			
+			String linia="";
+			
+			while(plik.getFilePointer()<plik.length()){
+				
+				linia=plik.readLine();
+				System.out.println(linia);
+				
+			}
+			
+			plik.close();  // zamkniecie strumienia odczytu
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	
+	public void wpisRanking(String nick, int wynik, String sciezka) throws RankingFull {
+		
+		String linia="";
+        int ileRekordow=0; // zmienna przechowujaca aktualna ilosc rekordow
+        int tmp;           //tmp do sortowania
+        String tmp1;       //tmp1 do sortowania
+        
+        try {
+			RandomAccessFile odczyt = new RandomAccessFile(sciezka, "r");
+			
+			while(odczyt.getFilePointer()<odczyt.length()) {linia=odczyt.readLine(); ileRekordow++;}
+			
+			if(ileRekordow==100) throw new RankingPelny();    // przykladowe uzycie wyjatkow (Jezeli ranking bedzie pelen wyrzuc komunikat)
+			
+			odczyt.seek(0);  // ustawienie wskaznika na poczatek pliku
+			
+			linia=odczyt.readLine();  //odczyt pierwszej lini
+			//odczyt.close();
+			ranking tabRanking[] = new ranking[ileRekordow]; // inicjowanie tablicy obiektow o rozmiarze ilosc_wpisow + 1 miejsce na nowy wpis
+			
+			//RandomAccessFile odczyt1 = new RandomAccessFile("D:/ranking.bin", "r");
+			//linia=odczyt1.readLine(); // odczyt pierwszej linii;
+			
+			for(int i=0 ; i<ileRekordow ; i++) tabRanking[i]=new ranking();   // tworzenie tablicy obiektow
+			
+			int u=0;
+			while(odczyt.getFilePointer()<odczyt.length()){
+				
+				linia=odczyt.readLine();
+				StringTokenizer t= new StringTokenizer(linia," .");
+				tabRanking[u].lp=Integer.parseInt(t.nextToken());
+				tabRanking[u].nazwa=t.nextToken();
+				tabRanking[u].wynik=Integer.parseInt(t.nextToken());
+				u++;
+			} 
+			
+			odczyt.close();  // zamkniecie strumienia odczytu      
+            tabRanking[ileRekordow-1].nazwa=nick;       // dopisanie aktualnie wprowadzanego wpisu do wyniku                        
+            tabRanking[ileRekordow-1].wynik=wynik;
+			
+            for(int i=0 ; i<ileRekordow ; i++)        // sortowanie babelkowe
+                for(int j=0 ; j<ileRekordow-1 ; j++)
+                 if(tabRanking[j].wynik<tabRanking[j+1].wynik){
+                                                                 tmp=tabRanking[j].wynik;
+                                                                 tabRanking[j].wynik = tabRanking[j+1].wynik;
+                                                                 tabRanking[j+1].wynik = tmp;
+                                                                 
+                                                                 tmp1=tabRanking[j].nazwa;
+                                                                 tabRanking[j].nazwa = tabRanking[j+1].nazwa;
+                                                                 tabRanking[j+1].nazwa = tmp1;
+                                                                                                                                
+                                                               }
+            
+            for(int i=0 ; i<ileRekordow ; i++) tabRanking[i].lp=i+1; 
+            odczyt.close();
+            
+            FileWriter zapis = new FileWriter(sciezka);
+            
+            zapis.write("Lp. Gracz Wynik\n"); // wpisanie pierwszej linii do pliku
+            
+            for(int i=0 ; i<ileRekordow ; i++) zapis.write(tabRanking[i].lp+". "+tabRanking[i].nazwa+" "+tabRanking[i].wynik+"\n");  // wpisanie posortowanych rekordow
+            
+            zapis.close();
+        
+            
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch(RankingFull e){
+			System.out.println("Ranking pelen ! Nie mozna dokonac wpisu !");
+		}
+		
+	}
+
+	
+	
+}
